@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Conceptos - {{ proyecto.nombre }}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+  <h1>Conceptos - Proyecto: {{ proyecto.nombre }}</h1>
+
+  <form method="POST" class="row g-3">
+    <div class="col-md-6">
+      <input name="descripcion" class="form-control" placeholder="Descripción" required>
+    </div>
+    <div class="col-md-2">
+      <input name="cantidad" type="number" class="form-control" placeholder="Cantidad" value="1">
+    </div>
+    <div class="col-md-2">
+      <input name="unidad" class="form-control" placeholder="Unidad">
+    </div>
+    <div class="col-md-2">
+      <input name="precio_unitario" type="number" step="0.01" class="form-control" placeholder="$ Unitario">
+    </div>
+    <div class="col-md-6">
+      <select name="proveedor_id" class="form-select">
+        {% for p in proveedores %}
+          <option value="{{ p.id }}">{{ p.nombre }} - {{ p.empresa }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-success" type="submit">Agregar Concepto</button>
+      <a href="/proyectos" class="btn btn-secondary">Volver a proyectos</a>
+    </div>
+  </form>
+
+  <hr>
+  <h2>Listado de Conceptos</h2>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Descripción</th>
+        <th>Cantidad</th>
+        <th>Unidad</th>
+        <th>Precio Unitario</th>
+        <th>Proveedor</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in conceptos %}
+        <tr>
+          <td>{{ c.descripcion }}</td>
+          <td>{{ c.cantidad }}</td>
+          <td>{{ c.unidad }}</td>
+          <td>${{ '%.2f'|format(c.precio_unitario) }}</td>
+          <td>{{ c.proveedor.nombre }}</td>
+          <td>${{ '%.2f'|format(c.cantidad * c.precio_unitario) }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
