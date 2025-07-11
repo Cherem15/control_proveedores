@@ -1,8 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from io import BytesIO
-from datetime import datetime
-import pdfkit
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///control_proveedores.db'
@@ -95,7 +93,10 @@ def cotizacion(proyecto_id):
     conceptos = Concepto.query.filter_by(proyecto_id=proyecto_id).all()
     return render_template('cotizacion.html', proyecto=proyecto, conceptos=conceptos)
 
+# CORRIGE RENDER: usa el puerto correcto
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
+
